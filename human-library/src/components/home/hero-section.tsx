@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Search, ArrowRight, Star } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { getFeaturedMentors, getMentorAvatarUrl } from "@/lib/mentors";
+import { getFeaturedMentors } from "@/lib/mentors";
+import { MentorAvatar } from "@/components/shared/mentor-avatar";
 import { categories } from "@/data/categories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,16 +105,15 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-10 flex flex-wrap items-center gap-4">
               <div className="flex -space-x-3">
                 {featuredForHero.map((m) => (
-                  <Image
+                  <MentorAvatar
                     key={m.id}
-                    src={getMentorAvatarUrl(m.avatarSeed)}
+                    seed={m.avatarSeed}
                     alt={m.name}
-                    width={40}
-                    height={40}
-                    className="rounded-full border-2 border-white bg-muted"
+                    size={40}
+                    className="rounded-full border-2 border-white"
                   />
                 ))}
               </div>
@@ -130,6 +129,7 @@ export function HeroSection() {
             </div>
           </div>
 
+          {/* Desktop mosaic */}
           <div className="relative hidden lg:block">
             <div className="grid grid-cols-2 gap-4">
               {featuredForHero.map((mentor, i) => (
@@ -141,17 +141,16 @@ export function HeroSection() {
                   }`}
                 >
                   <div className="aspect-[4/3] overflow-hidden bg-muted">
-                    <Image
-                      src={getMentorAvatarUrl(mentor.avatarSeed)}
+                    <MentorAvatar
+                      seed={mentor.avatarSeed}
                       alt={mentor.name}
-                      width={280}
-                      height={210}
+                      size={280}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                   <div className="p-4">
                     <p className="font-semibold">{mentor.name}</p>
-                    <p className="text-sm text-muted-foreground line-clamp-1">
+                    <p className="line-clamp-1 text-sm text-muted-foreground">
                       {mentor.title}
                     </p>
                     <div className="mt-2 flex items-center justify-between">
@@ -169,6 +168,37 @@ export function HeroSection() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Mobile / tablet horizontal scroll */}
+        <div className="mt-10 flex gap-4 overflow-x-auto pb-4 lg:hidden snap-x snap-mandatory">
+          {featuredForHero.map((mentor) => (
+            <Link
+              key={mentor.id}
+              href={`/mentors/${mentor.slug}`}
+              className="w-64 shrink-0 snap-start overflow-hidden rounded-2xl border bg-white shadow-md"
+            >
+              <div className="aspect-[4/3] overflow-hidden bg-muted">
+                <MentorAvatar
+                  seed={mentor.avatarSeed}
+                  alt={mentor.name}
+                  size={256}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <p className="font-semibold">{mentor.name}</p>
+                <p className="text-sm text-muted-foreground">{mentor.title}</p>
+                <div className="mt-2 flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    {mentor.rating}
+                  </span>
+                  <span className="font-semibold">${mentor.hourlyRate}/hr</span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

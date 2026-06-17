@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Star, BadgeCheck } from "lucide-react";
 import type { Mentor } from "@/types";
-import { getMentorAvatarUrl, formatPrice } from "@/lib/mentors";
+import { formatPrice } from "@/lib/mentors";
+import { MentorAvatar } from "@/components/shared/mentor-avatar";
 import { categories } from "@/data/categories";
 import { SectionHeader } from "@/components/home/section-header";
 import { Button } from "@/components/ui/button";
@@ -21,11 +21,10 @@ function FeaturedMentorCard({ mentor }: { mentor: Mentor }) {
       className="group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        <Image
-          src={getMentorAvatarUrl(mentor.avatarSeed)}
+        <MentorAvatar
+          seed={mentor.avatarSeed}
           alt={mentor.name}
-          width={400}
-          height={300}
+          size={400}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {mentor.featured && (
