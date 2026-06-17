@@ -1,4 +1,4 @@
-export type UserRole = "mentee" | "mentor" | "admin";
+export type UserRole = "user" | "mentor" | "admin";
 
 export interface User {
   id: string;
@@ -9,7 +9,11 @@ export interface User {
   createdAt: string;
 }
 
-export interface AuthSession {
-  user: User;
-  token: string;
+export interface Profile {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  avatar_url: string | null;
+  created_at: string;
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@/lib/validations";
@@ -15,8 +15,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const [serverError, setServerError] = useState("");
+
+  const redirectTo = searchParams.get("redirect") ?? "/mentors";
+  const authError = searchParams.get("error");
 
   const {
     register,
@@ -33,7 +37,8 @@ export function LoginForm() {
       setServerError(result.error);
       return;
     }
-    router.push("/mentors");
+    router.push(redirectTo);
+    router.refresh();
   }
 
   return (
@@ -46,9 +51,11 @@ export function LoginForm() {
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
-          {serverError && (
+          {(serverError || authError === "unauthorized") && (
             <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {serverError}
+              {authError === "unauthorized"
+                ? "You do not have permission to access that page."
+                : serverError}
             </div>
           )}
 
@@ -58,6 +65,7 @@ export function LoginForm() {
               id="email"
               type="email"
               placeholder="you@example.com"
+              autoComplete="email"
               {...register("email")}
             />
             {errors.email && (
@@ -71,16 +79,13 @@ export function LoginForm() {
               id="password"
               type="password"
               placeholder="••••••••"
+              autoComplete="current-password"
               {...register("password")}
             />
             {errors.password && (
               <p className="text-sm text-destructive">{errors.password.message}</p>
             )}
           </div>
-
-          <p className="text-xs text-muted-foreground">
-            Demo: demo@humanlibrary.app / Demo1234 or admin@humanlibrary.app / Admin123!
-          </p>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
@@ -88,8 +93,8 @@ export function LoginForm() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-primary hover:underline">
-              Create one
+            <Link href="/signup" className="font-medium text-primary hover:underline">
+              Sign up
             </Link>
           </p>
         </CardFooter>

@@ -14,7 +14,7 @@ const footerLinks = {
     { label: "Browse mentors", href: "/mentors" },
     { label: "How it works", href: "/#how-it-works" },
     { label: "Categories", href: "/#categories" },
-    { label: "Become a mentor", href: "/register" },
+    { label: "Become a mentor", href: "/signup" },
   ],
   company: [
     { label: "About us", href: "/about" },
@@ -31,7 +31,8 @@ const footerLinks = {
 
 export function Footer() {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname === "/login" || pathname === "/signup" || pathname === "/register";
   const isAdminPage = pathname.startsWith("/admin");
 
   if (isAuthPage || isAdminPage) return null;

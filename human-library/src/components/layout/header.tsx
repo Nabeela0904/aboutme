@@ -29,7 +29,8 @@ export function Header() {
   const { user, logout, isLoading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname === "/login" || pathname === "/signup" || pathname === "/register";
   const isAdminPage = pathname.startsWith("/admin");
 
   if (isAuthPage || isAdminPage) return null;
@@ -86,7 +87,7 @@ export function Header() {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                <DropdownMenuItem onClick={logout}>Sign out</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void logout()}>Sign out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -94,8 +95,8 @@ export function Header() {
               <Button variant="ghost" size="sm" render={<Link href="/login" />}>
                 Sign in
               </Button>
-              <Button size="sm" className="rounded-lg" render={<Link href="/register" />}>
-                Become a mentor
+              <Button size="sm" className="rounded-lg" render={<Link href="/signup" />}>
+                Sign up
               </Button>
             </>
           )}
@@ -126,7 +127,7 @@ export function Header() {
               ))}
               <div className="mt-4 flex flex-col gap-2 border-t pt-4">
                 {user ? (
-                  <Button variant="outline" onClick={() => { logout(); setMobileOpen(false); }}>
+                  <Button variant="outline" onClick={() => { void logout(); setMobileOpen(false); }}>
                     Sign out
                   </Button>
                 ) : (
@@ -134,8 +135,8 @@ export function Header() {
                     <Button variant="outline" render={<Link href="/login" onClick={() => setMobileOpen(false)} />}>
                       Sign in
                     </Button>
-                    <Button render={<Link href="/register" onClick={() => setMobileOpen(false)} />}>
-                      Get started
+                    <Button render={<Link href="/signup" onClick={() => setMobileOpen(false)} />}>
+                      Sign up
                     </Button>
                   </>
                 )}

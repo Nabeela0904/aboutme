@@ -24,6 +24,7 @@ export function RegisterForm() {
   const router = useRouter();
   const { register: registerUser } = useAuth();
   const [serverError, setServerError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const {
     register,
@@ -33,27 +34,35 @@ export function RegisterForm() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { role: "mentee" },
+    defaultValues: { role: "user" },
   });
 
   const role = watch("role");
 
   async function onSubmit(data: RegisterInput) {
     setServerError("");
+    setSuccessMessage("");
     const result = await registerUser(data);
+
     if (result.error) {
+      if (result.error.includes("confirm your account")) {
+        setSuccessMessage(result.error);
+        return;
+      }
       setServerError(result.error);
       return;
     }
+
     router.push("/mentors");
+    router.refresh();
   }
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Join {siteConfig.name}</CardTitle>
+        <CardTitle className="text-2xl">Create your account</CardTitle>
         <CardDescription>
-          Create an account to book mentorship sessions
+          Join {siteConfig.name} to book mentorship sessions or share your experience
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -64,9 +73,15 @@ export function RegisterForm() {
             </div>
           )}
 
+          {successMessage && (
+            <div className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {successMessage}
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="name">Full name</Label>
-            <Input id="name" placeholder="Jane Doe" {...register("name")} />
+            <Input id="name" placeholder="Jane Doe" autoComplete="name" {...register("name")} />
             {errors.name && (
               <p className="text-sm text-destructive">{errors.name.message}</p>
             )}
@@ -78,6 +93,7 @@ export function RegisterForm() {
               id="email"
               type="email"
               placeholder="you@example.com"
+              autoComplete="email"
               {...register("email")}
             />
             {errors.email && (
@@ -86,17 +102,17 @@ export function RegisterForm() {
           </div>
 
           <div className="space-y-2">
-            <Label>I want to</Label>
+            <Label>Account type</Label>
             <Select
               value={role}
-              onValueChange={(v) => setValue("role", v as "mentee" | "mentor")}
+              onValueChange={(v) => setValue("role", v as "user" | "mentor")}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="mentee">Find a mentor</SelectItem>
-                <SelectItem value="mentor">Become a mentor</SelectItem>
+                <SelectItem value="user">User — find a mentor</SelectItem>
+                <SelectItem value="mentor">Mentor — share your experience</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -107,6 +123,7 @@ export function RegisterForm() {
               id="password"
               type="password"
               placeholder="••••••••"
+              autoComplete="new-password"
               {...register("password")}
             />
             {errors.password && (
@@ -120,6 +137,7 @@ export function RegisterForm() {
               id="confirmPassword"
               type="password"
               placeholder="••••••••"
+              autoComplete="new-password"
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
@@ -131,7 +149,7 @@ export function RegisterForm() {
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Creating account..." : "Create account"}
+            {isSubmitting ? "Creating account..." : "Sign up"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}

@@ -1,14 +1,10 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import type { User } from "@/types";
-import {
-  clearSession,
-  getSession,
-  loginUser,
-  registerUser,
-  saveSession,
-} from "@/lib/auth";
+import { useRouter } from "next/navigation";
+import type { User, UserRole } from "@/types";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { fetchUserProfile, upsertUserProfile } from "@/lib/profiles";
 import type { LoginInput, RegisterInput } from "@/lib/validations";
 
 interface AuthContextValue {
@@ -16,44 +12,139 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (input: LoginInput) => Promise<{ error?: string }>;
   register: (input: RegisterInput) => Promise<{ error?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const session = getSession();
-    setUser(session?.user ?? null);
-    setIsLoading(false);
+  const loadProfile = useCallback(async (userId: string) => {
+    const profile = await fetchUserProfile(userId);
+    setUser(profile);
+    return profile;
   }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setIsLoading(false);
+      return;
+    }
+
+    const supabase = createClient();
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        loadProfile(session.user.id).finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        await loadProfile(session.user.id);
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [loadProfile]);
 
   const login = useCallback(async (input: LoginInput) => {
-    const result = loginUser(input.email, input.password);
-    if ("error" in result) return { error: result.error };
-    saveSession(result.session);
-    setUser(result.session.user);
+    if (!isSupabaseConfigured()) {
+      return { error: "Supabase is not configured. Add environment variables." };
+    }
+
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: input.email,
+      password: input.password,
+    });
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    if (data.user) {
+      const profile = await loadProfile(data.user.id);
+      if (!profile) {
+        return { error: "Account found but profile is missing. Contact support." };
+      }
+    }
+
     return {};
-  }, []);
+  }, [loadProfile]);
 
   const register = useCallback(async (input: RegisterInput) => {
-    const result = registerUser(input);
-    if ("error" in result) return { error: result.error };
-    const sessionResult = loginUser(input.email, input.password);
-    if ("session" in sessionResult) {
-      saveSession(sessionResult.session);
-      setUser(sessionResult.session.user);
+    if (!isSupabaseConfigured()) {
+      return { error: "Supabase is not configured. Add environment variables." };
     }
-    return {};
-  }, []);
 
-  const logout = useCallback(() => {
-    clearSession();
+    const supabase = createClient();
+    const role: UserRole = input.role;
+
+    const { data, error } = await supabase.auth.signUp({
+      email: input.email,
+      password: input.password,
+      options: {
+        data: {
+          name: input.name,
+          role,
+        },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    if (data.user) {
+      const profile = await upsertUserProfile({
+        id: data.user.id,
+        email: input.email,
+        name: input.name,
+        role,
+      });
+
+      if (profile) {
+        setUser(profile);
+      } else {
+        await loadProfile(data.user.id);
+      }
+
+      if (!data.session) {
+        return {
+          error:
+            "Check your email to confirm your account before signing in.",
+        };
+      }
+    }
+
+    return {};
+  }, [loadProfile]);
+
+  const logout = useCallback(async () => {
+    if (!isSupabaseConfigured()) {
+      setUser(null);
+      router.push("/");
+      return;
+    }
+
+    const supabase = createClient();
+    await supabase.auth.signOut();
     setUser(null);
-  }, []);
+    router.push("/");
+    router.refresh();
+  }, [router]);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>

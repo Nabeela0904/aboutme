@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { LoginForm } from "@/components/auth/login-form";
+import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata: Metadata = {
-  title: "Sign In",
-  description: "Sign in to your Human Library account.",
+  title: "Sign Up",
+  description: "Create a Human Library account as a user or mentor.",
 };
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12">
       <Suspense fallback={<div className="text-muted-foreground">Loading...</div>}>
-        <LoginForm />
+        <RegisterForm />
       </Suspense>
     </div>
   );

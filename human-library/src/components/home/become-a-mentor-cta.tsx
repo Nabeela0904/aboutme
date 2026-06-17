@@ -44,7 +44,7 @@ export function BecomeAMentorCta() {
                   size="lg"
                   variant="secondary"
                   className="gap-2 rounded-xl"
-                  render={<Link href="/register" />}
+                  render={<Link href="/signup" />}
                 >
                   Apply to become a mentor
                   <ArrowRight className="h-4 w-4" />

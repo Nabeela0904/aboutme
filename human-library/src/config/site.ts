@@ -7,7 +7,7 @@ export const siteConfig = {
   links: {
     mentors: "/mentors",
     login: "/login",
-    register: "/register",
+    register: "/signup",
     admin: "/admin",
   },
   contact: {
