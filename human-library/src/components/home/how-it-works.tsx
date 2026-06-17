@@ -1,48 +1,63 @@
-import { Search, Calendar, MessageCircle } from "lucide-react";
+import { Search, CalendarCheck, MessageSquare } from "lucide-react";
+import { SectionHeader } from "@/components/home/section-header";
 
 const steps = [
   {
     icon: Search,
-    title: "Browse the catalog",
+    step: "01",
+    title: "Find your person",
     description:
-      "Explore mentors by expertise, industry, and price. Every profile includes real reviews from past mentees.",
+      "Browse mentors by life experience — career changes, startup journeys, leadership challenges. Read real stories, not résumés.",
+    accent: "bg-blue-50 text-blue-600",
   },
   {
-    icon: Calendar,
-    title: "Book a session",
+    icon: CalendarCheck,
+    step: "02",
+    title: "Book a conversation",
     description:
-      "Pick a time that works for both of you. Sessions are 30, 60, or 90 minutes — you set the agenda.",
+      "Pick a time that works. Sessions are 30, 60, or 90 minutes. You set the agenda — they bring the lived experience.",
+    accent: "bg-orange-50 text-orange-600",
   },
   {
-    icon: MessageCircle,
-    title: "Grow together",
+    icon: MessageSquare,
+    step: "03",
+    title: "Walk away wiser",
     description:
-      "Show up with your questions. Leave with actionable advice, a clearer path, and a human connection.",
+      "Show up with your questions. Leave with clarity, a concrete plan, and the confidence that comes from talking to someone who's been there.",
+    accent: "bg-emerald-50 text-emerald-600",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="border-y bg-muted/30 py-20">
+    <section id="how-it-works" className="py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
-          <p className="mt-3 text-muted-foreground">
-            Three steps from curiosity to clarity. No subscriptions, no fluff.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="How it works"
+          title="Three steps to the conversation you need"
+          description="No subscriptions. No courses. Just a real person who's already lived your challenge."
+        />
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-3">
-          {steps.map((step, index) => (
-            <div key={step.title} className="relative text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <step.icon className="h-5 w-5" />
+        <div className="relative mt-16 grid gap-8 md:grid-cols-3">
+          <div className="absolute top-16 hidden h-0.5 w-full bg-border md:block" style={{ left: "16.67%", width: "66.67%" }} />
+
+          {steps.map((step) => (
+            <div
+              key={step.title}
+              className="relative rounded-2xl border bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
+            >
+              <div className="mb-6 flex items-center justify-between">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${step.accent}`}>
+                  <step.icon className="h-5 w-5" />
+                </div>
+                <span className="text-4xl font-bold text-muted-foreground/20">
+                  {step.step}
+                </span>
               </div>
-              <span className="mt-4 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Step {index + 1}
-              </span>
-              <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+              <h3 className="text-xl font-semibold">{step.title}</h3>
+              <p className="mt-3 leading-relaxed text-muted-foreground">
+                {step.description}
+              </p>
             </div>
           ))}
         </div>

@@ -19,8 +19,9 @@ import { cn } from "@/lib/utils";
 import { isAdmin } from "@/lib/auth";
 
 const navLinks = [
-  { href: "/mentors", label: "Browse Mentors" },
-  { href: "/#how-it-works", label: "How It Works" },
+  { href: "/mentors", label: "Find a mentor" },
+  { href: "/#categories", label: "Topics" },
+  { href: "/#how-it-works", label: "How it works" },
 ];
 
 export function Header() {
@@ -34,7 +35,14 @@ export function Header() {
   if (isAuthPage || isAdminPage) return null;
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b backdrop-blur-md",
+        pathname === "/"
+          ? "border-transparent bg-[#f7f5f2]/80"
+          : "border-border bg-background/80"
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -86,8 +94,8 @@ export function Header() {
               <Button variant="ghost" size="sm" render={<Link href="/login" />}>
                 Sign in
               </Button>
-              <Button size="sm" render={<Link href="/register" />}>
-                Get started
+              <Button size="sm" className="rounded-lg" render={<Link href="/register" />}>
+                Become a mentor
               </Button>
             </>
           )}

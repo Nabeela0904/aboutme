@@ -6,6 +6,8 @@ export const testimonials = [
     author: "Priya Sharma",
     role: "Software Engineer",
     company: "Stripe",
+    avatarSeed: "priya-sharma",
+    mentorName: "Sarah Okafor",
   },
   {
     id: "t2",
@@ -14,6 +16,8 @@ export const testimonials = [
     author: "Marcus Chen",
     role: "Founder",
     company: "Bloom Studio",
+    avatarSeed: "marcus-chen",
+    mentorName: "David Kim",
   },
   {
     id: "t3",
@@ -22,5 +26,17 @@ export const testimonials = [
     author: "Elena Rodriguez",
     role: "Product Manager",
     company: "Notion",
+    avatarSeed: "elena-rodriguez",
+    mentorName: "Maria Santos",
+  },
+  {
+    id: "t4",
+    quote:
+      "Within two sessions I had a clear roadmap for my staff engineer promotion. Worth every penny.",
+    author: "Jordan Lee",
+    role: "Senior Engineer",
+    company: "Figma",
+    avatarSeed: "jordan-lee",
+    mentorName: "Fatima Al-Hassan",
   },
 ] as const;

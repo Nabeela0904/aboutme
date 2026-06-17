@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Mentor } from "@/types";
 import { searchMentors } from "@/lib/mentors";
 import { MentorCard } from "@/components/mentors/mentor-card";
@@ -11,10 +12,11 @@ interface MentorsListProps {
 }
 
 export function MentorsList({ initialMentors }: MentorsListProps) {
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<MentorFiltersState>({
-    search: "",
-    category: "",
-    maxRate: "",
+    search: searchParams.get("q") ?? "",
+    category: searchParams.get("category") ?? "",
+    maxRate: searchParams.get("maxRate") ?? "",
   });
 
   const filteredMentors = useMemo(() => {

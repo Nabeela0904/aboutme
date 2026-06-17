@@ -1,8 +1,9 @@
 import { HeroSection } from "@/components/home/hero-section";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { FeaturedMentors } from "@/components/home/featured-mentors";
+import { CategoriesSection } from "@/components/home/categories-section";
 import { Testimonials } from "@/components/home/testimonials";
-import { CtaSection } from "@/components/home/cta-section";
+import { BecomeAMentorCta } from "@/components/home/become-a-mentor-cta";
 import { getFeaturedMentors } from "@/lib/mentors";
 
 export default function HomePage() {
@@ -11,10 +12,11 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <FeaturedMentors mentors={featuredMentors} />
       <HowItWorks />
+      <FeaturedMentors mentors={featuredMentors} />
+      <CategoriesSection />
       <Testimonials />
-      <CtaSection />
+      <BecomeAMentorCta />
     </>
   );
 }

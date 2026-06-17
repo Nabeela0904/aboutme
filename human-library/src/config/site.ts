@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Human Library",
-  tagline: "Borrow wisdom from real human experiences",
+  tagline: "Book a conversation with someone who has already lived it.",
   description:
     "A mentorship marketplace where you connect with experienced professionals for 1-on-1 guidance, career advice, and life lessons.",
   url: "https://humanlibrary.app",

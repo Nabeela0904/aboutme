@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { MentorsList } from "@/components/mentors/mentors-list";
 import { getAllMentors } from "@/lib/mentors";
 
@@ -18,7 +19,9 @@ export default function MentorsPage() {
           Filter by expertise, category, or price to find the right human book for your story.
         </p>
       </div>
-      <MentorsList initialMentors={mentors} />
+      <Suspense fallback={<div className="text-muted-foreground">Loading mentors...</div>}>
+        <MentorsList initialMentors={mentors} />
+      </Suspense>
     </div>
   );
 }
