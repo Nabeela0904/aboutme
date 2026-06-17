@@ -78,11 +78,11 @@ export function HeroSection() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All topics</SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      {cat.label}
-                    </SelectItem>
-                  ))}
+            {categories.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.name}
+              </SelectItem>
+            ))}
                 </SelectContent>
               </Select>
               <Button type="submit" className="rounded-xl px-6">
@@ -110,7 +110,7 @@ export function HeroSection() {
                 {featuredForHero.map((m) => (
                   <MentorAvatar
                     key={m.id}
-                    seed={m.avatarSeed}
+                    src={m.profileImage}
                     alt={m.name}
                     size={40}
                     className="rounded-full border-2 border-white"
@@ -142,7 +142,7 @@ export function HeroSection() {
                 >
                   <div className="aspect-[4/3] overflow-hidden bg-muted">
                     <MentorAvatar
-                      seed={mentor.avatarSeed}
+                      src={mentor.profileImage}
                       alt={mentor.name}
                       size={280}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -151,7 +151,7 @@ export function HeroSection() {
                   <div className="p-4">
                     <p className="font-semibold">{mentor.name}</p>
                     <p className="line-clamp-1 text-sm text-muted-foreground">
-                      {mentor.title}
+                      {mentor.profession}
                     </p>
                     <div className="mt-2 flex items-center justify-between">
                       <span className="flex items-center gap-1 text-sm">
@@ -180,7 +180,7 @@ export function HeroSection() {
             >
               <div className="aspect-[4/3] overflow-hidden bg-muted">
                 <MentorAvatar
-                  seed={mentor.avatarSeed}
+                  src={mentor.profileImage}
                   alt={mentor.name}
                   size={256}
                   className="h-full w-full object-cover"
@@ -188,7 +188,7 @@ export function HeroSection() {
               </div>
               <div className="p-4">
                 <p className="font-semibold">{mentor.name}</p>
-                <p className="text-sm text-muted-foreground">{mentor.title}</p>
+                <p className="text-sm text-muted-foreground">{mentor.profession}</p>
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1">
                     <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />

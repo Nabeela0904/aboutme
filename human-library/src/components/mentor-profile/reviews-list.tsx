@@ -1,9 +1,9 @@
 import { Star } from "lucide-react";
-import type { MentorReview } from "@/types";
+import type { Review } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ReviewsListProps {
-  reviews: MentorReview[];
+  reviews: Review[];
 }
 
 export function ReviewsList({ reviews }: ReviewsListProps) {

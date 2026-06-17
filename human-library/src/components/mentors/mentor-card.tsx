@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star, MapPin } from "lucide-react";
 import type { Mentor } from "@/types";
-import { getMentorAvatarUrl, formatPrice } from "@/lib/mentors";
+import { formatPrice } from "@/lib/mentors";
 import { categories } from "@/data/categories";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,23 +13,24 @@ interface MentorCardProps {
 }
 
 export function MentorCard({ mentor }: MentorCardProps) {
-  const primaryCategory = categories.find((c) => c.id === mentor.categories[0]);
+  const primaryCategory = categories.find((c) => c.id === mentor.categoryIds[0]);
 
   return (
     <Card className="flex flex-col overflow-hidden transition-shadow hover:shadow-md">
       <CardHeader className="pb-3">
         <div className="flex items-start gap-3">
           <Image
-            src={getMentorAvatarUrl(mentor.avatarSeed)}
+            src={mentor.profileImage}
             alt={mentor.name}
             width={48}
             height={48}
+            unoptimized
             className="rounded-full bg-muted"
           />
           <div className="min-w-0 flex-1">
             <h3 className="truncate font-semibold">{mentor.name}</h3>
             <p className="truncate text-sm text-muted-foreground">
-              {mentor.title} at {mentor.company}
+              {mentor.profession}
             </p>
           </div>
         </div>
@@ -41,7 +42,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
         <div className="flex flex-wrap gap-1.5">
           {primaryCategory && (
             <Badge variant="secondary" className="text-xs">
-              {primaryCategory.label}
+              {primaryCategory.name}
             </Badge>
           )}
           {mentor.skills.slice(0, 2).map((skill) => (
@@ -55,7 +56,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
           <div className="flex items-center gap-1">
             <Star className="h-3.5 w-3.5 fill-primary text-primary" />
             <span className="font-medium">{mentor.rating}</span>
-            <span className="text-muted-foreground">({mentor.reviewCount})</span>
+            <span className="text-muted-foreground">({mentor.reviews.length})</span>
           </div>
           <div className="flex items-center gap-1 text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" />

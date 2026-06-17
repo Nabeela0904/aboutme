@@ -29,14 +29,14 @@ export function searchMentors(query: {
     results = results.filter(
       (m) =>
         m.name.toLowerCase().includes(term) ||
-        m.title.toLowerCase().includes(term) ||
+        m.profession.toLowerCase().includes(term) ||
         m.bio.toLowerCase().includes(term) ||
         m.skills.some((s) => s.toLowerCase().includes(term))
     );
   }
 
   if (query.category) {
-    results = results.filter((m) => m.categories.includes(query.category!));
+    results = results.filter((m) => m.categoryIds.includes(query.category!));
   }
 
   if (query.maxRate) {
@@ -46,14 +46,15 @@ export function searchMentors(query: {
   return results.sort((a, b) => b.rating - a.rating);
 }
 
-export function getMentorAvatarUrl(seed: string): string {
-  return `https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
-}
-
 export function formatPrice(amount: number, currency: string): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: 0,
   }).format(amount);
+}
+
+/** @deprecated Use mentor.profileImage directly */
+export function getMentorAvatarUrl(seed: string): string {
+  return `https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
 }

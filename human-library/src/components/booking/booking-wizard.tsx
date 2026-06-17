@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
 import type { Mentor } from "@/types";
 import { bookingSchema, type BookingInput } from "@/lib/validations";
-import { getMentorAvatarUrl, formatPrice } from "@/lib/mentors";
+import { formatPrice } from "@/lib/mentors";
 import { useAuth } from "@/hooks/use-auth";
 import { useBookings } from "@/hooks/use-bookings";
 import { Button } from "@/components/ui/button";
@@ -265,15 +265,16 @@ export function BookingWizard({ mentor }: BookingWizardProps) {
             <CardHeader>
               <div className="flex items-center gap-3">
                 <Image
-                  src={getMentorAvatarUrl(mentor.avatarSeed)}
+                  src={mentor.profileImage}
                   alt={mentor.name}
                   width={48}
                   height={48}
+                  unoptimized
                   className="rounded-full"
                 />
                 <div>
                   <CardTitle className="text-base">{mentor.name}</CardTitle>
-                  <CardDescription>{mentor.title}</CardDescription>
+                  <CardDescription>{mentor.profession}</CardDescription>
                 </div>
               </div>
             </CardHeader>

@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { categories } from "@/data/categories";
+import { getCategoriesWithCounts } from "@/data/categories";
+import { getAllMentors } from "@/lib/mentors";
 import { SectionHeader } from "@/components/home/section-header";
 
 export function CategoriesSection() {
+  const mentors = getAllMentors();
+  const categories = getCategoriesWithCounts(mentors.map((m) => m.categoryIds));
+
   return (
     <section id="categories" className="py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -26,7 +30,7 @@ export function CategoriesSection() {
                 <category.icon className="h-5 w-5" />
               </div>
               <h3 className="font-semibold text-foreground group-hover:text-primary">
-                {category.label}
+                {category.name}
               </h3>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
                 {category.description}

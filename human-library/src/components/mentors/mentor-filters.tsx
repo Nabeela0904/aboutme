@@ -51,11 +51,11 @@ export function MentorFilters({ filters, onChange }: MentorFiltersProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All categories</SelectItem>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
-                {cat.label}
-              </SelectItem>
-            ))}
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
           </SelectContent>
         </Select>
       </div>

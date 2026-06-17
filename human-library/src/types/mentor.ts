@@ -1,12 +1,6 @@
-export interface MentorReview {
-  id: string;
-  authorName: string;
-  rating: number;
-  comment: string;
-  date: string;
-}
+import type { Review } from "./review";
 
-export interface TimeSlot {
+export interface Availability {
   day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
   startTime: string;
   endTime: string;
@@ -14,25 +8,23 @@ export interface TimeSlot {
 
 export interface Mentor {
   id: string;
-  slug: string;
   name: string;
-  title: string;
-  company: string;
-  bio: string;
-  longBio: string;
-  avatarSeed: string;
-  categories: string[];
-  skills: string[];
-  languages: string[];
-  hourlyRate: number;
-  currency: string;
-  rating: number;
-  reviewCount: number;
-  sessionCount: number;
+  profileImage: string;
+  profession: string;
   yearsExperience: number;
-  location: string;
-  timezone: string;
+  hourlyRate: number;
+  bio: string;
+  skills: string[];
+  rating: number;
+  totalSessions: number;
+  availability: Availability[];
+  reviews: Review[];
+  /** URL slug for routing */
+  slug: string;
+  /** Category IDs this mentor belongs to */
+  categoryIds: string[];
+  /** Whether to show on the landing page */
   featured: boolean;
-  availability: TimeSlot[];
-  reviews: MentorReview[];
+  currency: string;
+  location: string;
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, DollarSign, Clock, Users } from "lucide-react";
 import { MentorAvatar } from "@/components/shared/mentor-avatar";
+import { buildProfileImage } from "@/lib/avatar";
 import { Button } from "@/components/ui/button";
 
 const perks = [
@@ -71,7 +72,7 @@ export function BecomeAMentorCta() {
                       }`}
                     >
                       <MentorAvatar
-                        seed={seed}
+                        src={buildProfileImage(seed)}
                         alt="Mentor"
                         size={160}
                         className="aspect-square object-cover"

@@ -42,7 +42,7 @@ export default async function MentorProfilePage({ params }: MentorProfilePagePro
               <CardTitle className="text-lg">About</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="leading-relaxed text-muted-foreground">{mentor.longBio}</p>
+              <p className="leading-relaxed text-muted-foreground">{mentor.bio}</p>
             </CardContent>
           </Card>
 

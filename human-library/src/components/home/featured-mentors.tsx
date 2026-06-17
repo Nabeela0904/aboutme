@@ -13,7 +13,7 @@ interface FeaturedMentorsProps {
 }
 
 function FeaturedMentorCard({ mentor }: { mentor: Mentor }) {
-  const primaryCategory = categories.find((c) => c.id === mentor.categories[0]);
+  const primaryCategory = categories.find((c) => c.id === mentor.categoryIds[0]);
 
   return (
     <Link
@@ -22,7 +22,7 @@ function FeaturedMentorCard({ mentor }: { mentor: Mentor }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <MentorAvatar
-          seed={mentor.avatarSeed}
+          src={mentor.profileImage}
           alt={mentor.name}
           size={400}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -40,7 +40,7 @@ function FeaturedMentorCard({ mentor }: { mentor: Mentor }) {
           <div className="min-w-0">
             <h3 className="truncate font-semibold text-foreground">{mentor.name}</h3>
             <p className="truncate text-sm text-muted-foreground">
-              {mentor.title}
+              {mentor.profession}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1 text-sm">
@@ -56,7 +56,7 @@ function FeaturedMentorCard({ mentor }: { mentor: Mentor }) {
         <div className="mt-4 flex flex-wrap gap-1.5">
           {primaryCategory && (
             <Badge variant="secondary" className="rounded-md text-xs font-normal">
-              {primaryCategory.label}
+              {primaryCategory.name}
             </Badge>
           )}
         </div>

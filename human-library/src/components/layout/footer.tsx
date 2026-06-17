@@ -108,7 +108,7 @@ export function Footer() {
                     href={`/mentors?category=${cat.id}`}
                     className="transition-colors hover:text-foreground"
                   >
-                    {cat.label}
+                    {cat.name}
                   </Link>
                 </li>
               ))}

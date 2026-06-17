@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { getAllMentors, getMentorAvatarUrl, formatPrice } from "@/lib/mentors";
+import { getAllMentors, formatPrice } from "@/lib/mentors";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -38,23 +38,24 @@ export function MentorsTable() {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Image
-                      src={getMentorAvatarUrl(mentor.avatarSeed)}
+                      src={mentor.profileImage}
                       alt={mentor.name}
                       width={32}
                       height={32}
+                      unoptimized
                       className="rounded-full"
                     />
                     <div>
                       <p className="font-medium">{mentor.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {mentor.title} at {mentor.company}
+                        {mentor.profession}
                       </p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
-                    {mentor.categories.slice(0, 2).map((cat) => (
+                    {mentor.categoryIds.slice(0, 2).map((cat) => (
                       <Badge key={cat} variant="outline" className="text-xs">
                         {cat}
                       </Badge>
@@ -68,7 +69,7 @@ export function MentorsTable() {
                     {mentor.rating}
                   </span>
                 </TableCell>
-                <TableCell>{mentor.sessionCount}</TableCell>
+                <TableCell>{mentor.totalSessions}</TableCell>
                 <TableCell>
                   {mentor.featured ? (
                     <Badge>Featured</Badge>

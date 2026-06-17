@@ -1,6 +1,7 @@
 import { Star, Quote } from "lucide-react";
 import { testimonials } from "@/data/testimonials";
 import { MentorAvatar } from "@/components/shared/mentor-avatar";
+import { buildProfileImage } from "@/lib/avatar";
 import { SectionHeader } from "@/components/home/section-header";
 
 export function Testimonials() {
@@ -36,7 +37,7 @@ export function Testimonials() {
               <div className="mt-6 flex items-center justify-between border-t pt-6">
                 <div className="flex items-center gap-3">
                   <MentorAvatar
-                    seed={t.avatarSeed}
+                    src={buildProfileImage(t.avatarSeed)}
                     alt={t.author}
                     size={44}
                     className="rounded-full"
