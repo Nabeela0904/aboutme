@@ -1,6 +1,6 @@
 # Human Library
 
-A modern mentorship marketplace built with Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, and Supabase Auth.
+A modern mentorship marketplace built with Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, and Supabase.
 
 ## Getting Started
 
@@ -12,53 +12,47 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
 ## Supabase Setup
 
 1. Create a project at [supabase.com](https://supabase.com)
 2. Copy your project URL and anon key into `.env.local`
-3. Run the SQL migration in `supabase/migrations/001_profiles.sql` via the Supabase SQL Editor
-4. In Supabase Auth settings, add `http://localhost:3000/auth/callback` as a redirect URL
-5. (Optional) Promote a user to admin:
+3. Run migrations in order via the Supabase SQL Editor:
+   - `supabase/migrations/001_profiles.sql`
+   - `supabase/migrations/002_core_schema.sql`
+   - `supabase/seed.sql`
+4. Add `http://localhost:3000/auth/callback` as a redirect URL in Auth settings
+5. Promote an admin:
    ```sql
-   update public.profiles set role = 'admin' where email = 'your@email.com';
+   update public.users set role = 'admin' where email = 'your@email.com';
    ```
 
-## Authentication
+See `supabase/SCHEMA.md` for the full database schema and relationships.
+
+## Database Tables
+
+| Table | Description |
+|-------|-------------|
+| `users` | App users (extends auth.users) |
+| `categories` | Mentorship topic categories |
+| `mentors` | Mentor profiles |
+| `mentor_categories` | Mentor ↔ category (M:N) |
+| `mentor_availability` | Weekly time slots |
+| `bookings` | Session bookings |
+| `reviews` | Post-session reviews |
+
+## TypeScript Types
+
+- `src/types/database.ts` — Supabase `Database` interface
+- `src/types/db/` — Per-table Row, Insert, Update types
+- `src/lib/db/mappers.ts` — DB row → domain model mappers
+
+## Auth
 
 | Route | Description |
 |-------|-------------|
 | `/login` | Sign in |
-| `/signup` | Create account (User or Mentor role) |
-| `/auth/callback` | Supabase OAuth / email confirmation handler |
+| `/signup` | Create account |
+| `/admin` | Admin only |
+| `/booking/*` | Authenticated users |
 
-### Roles
-
-- **user** — Book mentorship sessions
-- **mentor** — Share experience (mentor onboarding coming soon)
-- **admin** — Access admin dashboard
-
-### Protected Routes
-
-- `/booking/*` — Requires signed-in user (any role)
-- `/admin/*` — Requires admin role
-
-## Pages
-
-- `/` — Home page
-- `/mentors` — Browse and filter mentors
-- `/mentors/[slug]` — Mentor profile
-- `/booking/[mentorSlug]` — Book a session
-- `/login` — Sign in
-- `/signup` — Sign up
-- `/admin` — Admin dashboard
-
-## Tech Stack
-
-- **Next.js 15** (App Router)
-- **Supabase** (Auth + profiles)
-- **TypeScript**
-- **Tailwind CSS v4**
-- **Shadcn UI**
-- **React Hook Form + Zod**
+Roles: `user`, `mentor`, `admin`

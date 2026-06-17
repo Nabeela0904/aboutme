@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { useRouter } from "next/navigation";
 import type { User, UserRole } from "@/types";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { fetchUserProfile, upsertUserProfile } from "@/lib/profiles";
+import { fetchUserById, upsertUser } from "@/lib/users";
 import type { LoginInput, RegisterInput } from "@/lib/validations";
 
 interface AuthContextValue {
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const loadProfile = useCallback(async (userId: string) => {
-    const profile = await fetchUserProfile(userId);
+    const profile = await fetchUserById(userId);
     setUser(profile);
     return profile;
   }, []);
@@ -108,7 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (data.user) {
-      const profile = await upsertUserProfile({
+      const profile = await upsertUser({
         id: data.user.id,
         email: input.email,
         name: input.name,

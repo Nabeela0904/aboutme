@@ -54,7 +54,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAdminRoute) {
     const { data: profile } = await supabase
-      .from("profiles")
+      .from("users")
       .select("role")
       .eq("id", user.id)
       .single();

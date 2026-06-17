@@ -1,15 +1,4 @@
-import type { Profile, User, UserRole } from "@/types";
-
-export function mapProfileToUser(profile: Profile): User {
-  return {
-    id: profile.id,
-    email: profile.email,
-    name: profile.name,
-    role: profile.role,
-    avatarUrl: profile.avatar_url ?? undefined,
-    createdAt: profile.created_at,
-  };
-}
+import type { User, UserRole } from "@/types";
 
 export function isAdmin(user: User): boolean {
   return user.role === "admin";

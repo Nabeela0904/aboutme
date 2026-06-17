@@ -1,20 +1,20 @@
 import type { User, UserRole } from "@/types";
-import { mapProfileToUser } from "@/lib/auth";
+import { mapUserRowToUser } from "@/types/user";
 import { createClient } from "@/lib/supabase/client";
 
-export async function fetchUserProfile(userId: string): Promise<User | null> {
+export async function fetchUserById(userId: string): Promise<User | null> {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from("profiles")
+    .from("users")
     .select("*")
     .eq("id", userId)
     .single();
 
   if (error || !data) return null;
-  return mapProfileToUser(data);
+  return mapUserRowToUser(data);
 }
 
-export async function upsertUserProfile(input: {
+export async function upsertUser(input: {
   id: string;
   email: string;
   name: string;
@@ -22,7 +22,7 @@ export async function upsertUserProfile(input: {
 }): Promise<User | null> {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from("profiles")
+    .from("users")
     .upsert({
       id: input.id,
       email: input.email,
@@ -33,5 +33,11 @@ export async function upsertUserProfile(input: {
     .single();
 
   if (error || !data) return null;
-  return mapProfileToUser(data);
+  return mapUserRowToUser(data);
 }
+
+/** @deprecated Use fetchUserById */
+export const fetchUserProfile = fetchUserById;
+
+/** @deprecated Use upsertUser */
+export const upsertUserProfile = upsertUser;
