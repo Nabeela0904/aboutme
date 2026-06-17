@@ -1,6 +1,17 @@
 import { mentors } from "@/data/mentors";
 import type { Mentor } from "@/types";
 
+export type MentorSortOption = "popularity" | "rating" | "price-asc" | "price-desc";
+
+export interface MentorSearchQuery {
+  search?: string;
+  profession?: string;
+  category?: string;
+  maxRate?: number;
+  minRating?: number;
+  sort?: MentorSortOption;
+}
+
 export function getAllMentors(): Mentor[] {
   return mentors;
 }
@@ -17,11 +28,12 @@ export function getMentorById(id: string): Mentor | undefined {
   return mentors.find((m) => m.id === id);
 }
 
-export function searchMentors(query: {
-  search?: string;
-  category?: string;
-  maxRate?: number;
-}): Mentor[] {
+export function getProfessions(): string[] {
+  const professions = mentors.map((m) => m.profession);
+  return [...new Set(professions)].sort();
+}
+
+export function filterMentors(query: MentorSearchQuery): Mentor[] {
   let results = [...mentors];
 
   if (query.search) {
@@ -35,6 +47,10 @@ export function searchMentors(query: {
     );
   }
 
+  if (query.profession) {
+    results = results.filter((m) => m.profession === query.profession);
+  }
+
   if (query.category) {
     results = results.filter((m) => m.categoryIds.includes(query.category!));
   }
@@ -43,7 +59,36 @@ export function searchMentors(query: {
     results = results.filter((m) => m.hourlyRate <= query.maxRate!);
   }
 
-  return results.sort((a, b) => b.rating - a.rating);
+  if (query.minRating) {
+    results = results.filter((m) => m.rating >= query.minRating!);
+  }
+
+  switch (query.sort) {
+    case "rating":
+      results.sort((a, b) => b.rating - a.rating);
+      break;
+    case "price-asc":
+      results.sort((a, b) => a.hourlyRate - b.hourlyRate);
+      break;
+    case "price-desc":
+      results.sort((a, b) => b.hourlyRate - a.hourlyRate);
+      break;
+    case "popularity":
+    default:
+      results.sort((a, b) => b.totalSessions - a.totalSessions);
+      break;
+  }
+
+  return results;
+}
+
+/** @deprecated Use filterMentors instead */
+export function searchMentors(query: {
+  search?: string;
+  category?: string;
+  maxRate?: number;
+}): Mentor[] {
+  return filterMentors(query);
 }
 
 export function formatPrice(amount: number, currency: string): string {
